@@ -1,0 +1,13 @@
+from abc import ABC, abstractmethod
+from typing import List
+from src.domain.core.entities import Evaluation, Event
+
+class EvaluacionRepositoryPort(ABC):
+    @abstractmethod
+    def guardar_evento(self, event: Event) -> Event: ...
+    @abstractmethod
+    def obtener_eventos(self) -> List[Event]: ...
+    @abstractmethod
+    def guardar_evaluacion(self, evaluation: Evaluation) -> Evaluation: ...
+    @abstractmethod
+    def obtener_evaluaciones_usuario(self, user_id: int) -> List[Evaluation]: ...

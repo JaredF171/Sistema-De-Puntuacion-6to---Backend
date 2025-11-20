@@ -1,0 +1,13 @@
+from abc import ABC, abstractmethod
+from typing import List, Optional
+from src.domain.core.entities import Evaluation, Event
+
+class EvaluacionServicePort(ABC):
+    @abstractmethod
+    def crear_evento(self, event: Event) -> Event: ...
+    @abstractmethod
+    def listar_eventos(self) -> List[Event]: ...
+    @abstractmethod
+    def enviar_evaluacion(self, evaluation: Evaluation) -> Evaluation: ...
+    @abstractmethod
+    def obtener_promedio_usuario(self, user_id: int) -> float: ...
