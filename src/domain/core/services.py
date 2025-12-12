@@ -1,6 +1,6 @@
 from typing import List
 from datetime import datetime
-from src.domain.core.entities import Event, Evaluation
+from src.domain.core.entities import Event, Evaluation, Respondent
 from src.domain.ports.inbound.evaluacion_service_port import EvaluacionServicePort
 from src.domain.ports.out.evaluacion_repository_port import EvaluacionRepositoryPort
 
@@ -28,3 +28,6 @@ class EvaluacionService(EvaluacionServicePort):
                 total += ans.score
                 count += 1
         return total / count if count > 0 else 0.0
+
+    def listar_personas_encuestadas(self) -> List[Respondent]:
+        return self.repo.obtener_personas_encuestadas()

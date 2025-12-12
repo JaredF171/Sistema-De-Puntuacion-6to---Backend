@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from src.domain.core.entities import Evaluation, Event
+from src.domain.core.entities import Evaluation, Event, Respondent
 
 class EvaluacionRepositoryPort(ABC):
     @abstractmethod
@@ -11,3 +11,5 @@ class EvaluacionRepositoryPort(ABC):
     def guardar_evaluacion(self, evaluation: Evaluation) -> Evaluation: ...
     @abstractmethod
     def obtener_evaluaciones_usuario(self, user_id: int) -> List[Evaluation]: ...
+    @abstractmethod
+    def obtener_personas_encuestadas(self) -> List[Respondent]: ...
