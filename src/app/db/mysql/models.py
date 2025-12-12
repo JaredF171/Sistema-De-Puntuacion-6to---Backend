@@ -11,6 +11,7 @@ class EvaluationModel(models.Model):
     event_id = models.IntegerField()
     evaluated_user_id = models.IntegerField()
     evaluator_user_id = models.IntegerField()
+    evaluator_email = models.EmailField(blank=True, null=True)
     type = models.CharField(max_length=20, default="360")
     created_at = models.DateTimeField(auto_now_add=True)
 

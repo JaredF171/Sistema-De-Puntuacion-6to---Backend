@@ -37,6 +37,7 @@ class EvaluationController(APIView):
             event_id=data["event_id"],
             evaluated_user_id=data["evaluated_user_id"],
             evaluator_user_id=data["evaluator_user_id"],
+            evaluator_email=data.get("evaluator_email"),
             type="360",
             created_at=datetime.now(),
             answers=answers
@@ -48,3 +49,19 @@ class AverageController(APIView):
     def get(self, request, user_id):
         avg = service.obtener_promedio_usuario(user_id)
         return Response({"evaluated_user_id": user_id, "average_score": avg})
+
+
+class RespondentsController(APIView):
+    def get(self, request):
+        respondents = service.listar_personas_encuestadas()
+        return Response([
+            {
+                "evaluation_id": r.evaluation_id,
+                "event_id": r.event_id,
+                "evaluated_user_id": r.evaluated_user_id,
+                "evaluator_user_id": r.evaluator_user_id,
+                "evaluator_email": r.evaluator_email,
+                "created_at": r.created_at.isoformat(),
+            }
+            for r in respondents
+        ])

@@ -1,4 +1,4 @@
-from src.domain.core.entities import Event, Evaluation, EvaluationAnswer
+from src.domain.core.entities import Event, Evaluation, EvaluationAnswer, Respondent
 from src.domain.ports.out.evaluacion_repository_port import EvaluacionRepositoryPort
 from src.app.db.mysql.models import EventModel, EvaluationModel, EvaluationAnswerModel
 
@@ -29,6 +29,7 @@ class EvaluacionMySQLRepository(EvaluacionRepositoryPort):
             event_id=evaluation.event_id,
             evaluated_user_id=evaluation.evaluated_user_id,
             evaluator_user_id=evaluation.evaluator_user_id,
+            evaluator_email=evaluation.evaluator_email,
             type=evaluation.type
         )
         for ans in evaluation.answers:
@@ -49,7 +50,21 @@ class EvaluacionMySQLRepository(EvaluacionRepositoryPort):
             ]
             result.append(Evaluation(
                 id=e.id, event_id=e.event_id, evaluated_user_id=e.evaluated_user_id,
-                evaluator_user_id=e.evaluator_user_id, type=e.type,
+                evaluator_user_id=e.evaluator_user_id, evaluator_email=e.evaluator_email, type=e.type,
                 created_at=e.created_at, answers=answers
             ))
         return result
+
+    def obtener_personas_encuestadas(self):
+        evaluaciones = EvaluationModel.objects.all().order_by("-created_at")
+        return [
+            Respondent(
+                evaluation_id=e.id,
+                event_id=e.event_id,
+                evaluated_user_id=e.evaluated_user_id,
+                evaluator_user_id=e.evaluator_user_id,
+                evaluator_email=e.evaluator_email,
+                created_at=e.created_at,
+            )
+            for e in evaluaciones
+        ]

@@ -14,6 +14,7 @@ class Evaluation:
     event_id: int
     evaluated_user_id: int
     evaluator_user_id: int
+    evaluator_email: Optional[str]
     type: str
     created_at: datetime
     answers: List[EvaluationAnswer]
@@ -26,3 +27,13 @@ class Event:
     start_date: datetime
     end_date: datetime
     admin_id: int
+
+
+@dataclass
+class Respondent:
+    evaluation_id: int
+    event_id: int
+    evaluated_user_id: int
+    evaluator_user_id: int
+    evaluator_email: Optional[str]
+    created_at: datetime

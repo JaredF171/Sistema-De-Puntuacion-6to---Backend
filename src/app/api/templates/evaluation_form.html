@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Desempeño</title>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --accent: #14b8a6;
+            --light: #ecfeff;
+            --text: #0b1220;
+            --muted: #5b6478;
+            --surface: #ffffff;
+            --border: #d7e5ec;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #e0f7f6, #f4fafc);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--primary);
+            color: #fff;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.4px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 32px auto;
+            padding: 0 16px 40px;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(15, 118, 110, 0.08);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 span.icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: var(--light);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: #f8fcfd;
+            font-size: 14px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.18);
+        }
+
+        .question {
+            padding: 18px 18px 10px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 14px;
+            background: #fdfefe;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-title {
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .range-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .range-wrapper input[type="range"] {
+            flex: 1;
+            accent-color: var(--accent);
+        }
+
+        .badge {
+            min-width: 42px;
+            text-align: center;
+            padding: 8px 10px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 700;
+            box-shadow: 0 10px 24px rgba(15, 118, 110, 0.35);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0f766e, #0ea5e9);
+            color: #fff;
+            box-shadow: 0 12px 30px rgba(14, 165, 233, 0.35);
+        }
+
+        .btn-secondary {
+            background: #0f172a;
+            color: #fff;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+        }
+
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); box-shadow: none; }
+
+        .alert {
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-top: 12px;
+            font-weight: 600;
+        }
+
+        .alert-success { background: #ecfdf3; color: #036949; border: 1px solid #b2f5d6; }
+        .alert-error { background: #fef2f2; color: #9f1239; border: 1px solid #fecdd3; }
+
+        .table-wrapper {
+            margin-top: 12px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th { background: #f8fcfd; color: var(--muted); font-weight: 700; }
+
+        tr:hover td { background: #f1fbfa; }
+
+        @media (max-width: 720px) {
+            .question-header { flex-direction: column; align-items: flex-start; }
+            .range-wrapper { flex-direction: column; align-items: flex-start; }
+            .badge { align-self: flex-start; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Evaluación de Desempeño 360°</h1>
+    <p style="margin-top:8px;opacity:0.9;">Formulario modernizado con calificaciones de 0 a 20 y control de correos Senati</p>
+</header>
+<main>
+    <section class="card">
+        <h2><span class="icon">1</span>Información General</h2>
+        <div class="field-grid">
+            <div>
+                <label for="event">ID de Evento</label>
+                <input type="number" id="event" placeholder="Ej: 1" required>
+            </div>
+            <div>
+                <label for="evaluated">ID de Evaluado</label>
+                <input type="number" id="evaluated" placeholder="Ej: 101" required>
+            </div>
+            <div>
+                <label for="evaluator">Tu ID (Encuestador)</label>
+                <input type="number" id="evaluator" placeholder="Ej: 150" required>
+            </div>
+            <div>
+                <label for="email">Correo institucional Senati</label>
+                <input type="email" id="email" placeholder="1503873@senati.pe" pattern="^[0-9]+@senati\.pe$" required>
+            </div>
+        </div>
+        <div id="generalAlert"></div>
+    </section>
+
+    <section class="card">
+        <h2><span class="icon">2</span>Responde cada criterio (0 a 20)</h2>
+        <div id="questions"></div>
+    </section>
+
+    <div class="actions">
+        <button class="btn btn-primary" id="submitBtn">Enviar evaluación</button>
+        <button class="btn btn-secondary" id="loadRespondents">Ver personas encuestadas</button>
+    </div>
+
+    <section class="card" id="respondentsSection" style="display:none;">
+        <h2><span class="icon">3</span>Personas encuestadas</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Evaluación</th>
+                        <th>Evento</th>
+                        <th>ID Evaluado</th>
+                        <th>ID Encuestador</th>
+                        <th>Correo</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="respondentsTable">
+                    <tr><td colspan="6" style="text-align:center; color: var(--muted);">Carga los registros para verlos aquí.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<script>
+    const questions = [
+        { id: 1, text: '¿Llega puntual a reuniones o daily?' },
+        { id: 2, text: '¿Comunica anticipadamente cambios o retrasos?' },
+        { id: 3, text: '¿Se refiere a los demás con respeto?' },
+        { id: 4, text: '¿Explica el motivo de cada compromiso?' },
+        { id: 5, text: '¿Participa con frecuencia y aporta ideas?' },
+        { id: 6, text: '¿Mantiene la calidad de forma constante?' },
+        { id: 7, text: '¿Comunica riesgos o bloqueos?' },
+        { id: 8, text: '¿Se muestra comprensivo(a)?' },
+        { id: 9, text: '¿Ayuda a sus compañeros?' },
+    ];
+
+    const questionsContainer = document.getElementById('questions');
+    const generalAlert = document.getElementById('generalAlert');
+    const respondentsSection = document.getElementById('respondentsSection');
+    const respondentsTable = document.getElementById('respondentsTable');
+
+    questions.forEach(q => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'question';
+        wrapper.innerHTML = `
+            <div class="question-header">
+                <p class="question-title">${q.text}</p>
+                <span class="badge" id="badge-${q.id}">10</span>
+            </div>
+            <div class="range-wrapper">
+                <input type="range" min="0" max="20" step="1" value="10" data-id="${q.id}" aria-label="${q.text}">
+                <small style="color: var(--muted);">Arrastra para elegir una nota de 0 a 20</small>
+            </div>
+            <textarea rows="2" placeholder="Comentario (opcional)" data-comment="${q.id}"></textarea>
+        `;
+        questionsContainer.appendChild(wrapper);
+    });
+
+    questionsContainer.addEventListener('input', (event) => {
+        if (event.target.type === 'range') {
+            const id = event.target.dataset.id;
+            document.getElementById(`badge-${id}`).textContent = event.target.value;
+        }
+    });
+
+    function showAlert(message, type = 'success') {
+        generalAlert.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    }
+
+    async function submitEvaluation() {
+        generalAlert.innerHTML = '';
+        const payload = {
+            event_id: Number(document.getElementById('event').value),
+            evaluated_user_id: Number(document.getElementById('evaluated').value),
+            evaluator_user_id: Number(document.getElementById('evaluator').value),
+            evaluator_email: document.getElementById('email').value,
+            answers: questions.map(q => ({
+                criterion_id: q.id,
+                score: Number(document.querySelector(`input[data-id="${q.id}"]`).value),
+                comment: document.querySelector(`textarea[data-comment="${q.id}"]`).value || null,
+            })),
+        };
+
+        if (!payload.evaluator_email.match(/^[0-9]+@senati\.pe$/)) {
+            showAlert('Ingresa un correo institucional válido (solo números + @senati.pe).', 'error');
+            return;
+        }
+
+        if (payload.answers.some(a => a.score < 0 || a.score > 20)) {
+            showAlert('Todas las respuestas deben estar entre 0 y 20.', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/evaluations/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            if (!response.ok) throw new Error('No se pudo enviar la evaluación');
+            showAlert('¡Evaluación enviada con éxito!', 'success');
+        } catch (error) {
+            showAlert(error.message, 'error');
+        }
+    }
+
+    async function loadRespondents() {
+        respondentsSection.style.display = 'block';
+        respondentsTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--muted);">Cargando...</td></tr>`;
+        try {
+            const response = await fetch('/api/evaluations/respondents/');
+            if (!response.ok) throw new Error('No se pudieron obtener los registros');
+            const data = await response.json();
+            if (!data.length) {
+                respondentsTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--muted);">No hay personas encuestadas aún.</td></tr>`;
+                return;
+            }
+            respondentsTable.innerHTML = data.map(item => `
+                <tr>
+                    <td>#${item.evaluation_id}</td>
+                    <td>${item.event_id}</td>
+                    <td>${item.evaluated_user_id}</td>
+                    <td>${item.evaluator_user_id}</td>
+                    <td>${item.evaluator_email || '—'}</td>
+                    <td>${new Date(item.created_at).toLocaleString('es-PE')}</td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            respondentsTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color: #9f1239;">${error.message}</td></tr>`;
+        }
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', submitEvaluation);
+    document.getElementById('loadRespondents').addEventListener('click', loadRespondents);
+</script>
+</body>
+</html>
