@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 from src.domain.core.entities import Event, Evaluation
 from src.domain.ports.in_.evaluacion_service_port import EvaluacionServicePort
@@ -15,6 +15,13 @@ class EvaluacionService(EvaluacionServicePort):
 
     def listar_eventos(self) -> List[Event]:
         return self.repo.obtener_eventos()
+
+    def listar_evaluaciones(self, *, event_id: Optional[int] = None, evaluated_user_id: Optional[int] = None, evaluator_user_id: Optional[int] = None) -> List[Evaluation]:
+        return self.repo.obtener_evaluaciones(
+            event_id=event_id,
+            evaluated_user_id=evaluated_user_id,
+            evaluator_user_id=evaluator_user_id,
+        )
 
     def enviar_evaluacion(self, evaluation: Evaluation) -> Evaluation:
         evaluation.created_at = datetime.now()

@@ -3,8 +3,26 @@ from rest_framework import serializers
 
 class EvaluationAnswerSerializer(serializers.Serializer):
     criterion_id = serializers.IntegerField()
-    score = serializers.IntegerField()
+    score = serializers.IntegerField(min_value=1, max_value=5)
     comment = serializers.CharField(allow_blank=True, allow_null=True, required=False)
+
+
+class EvaluationSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True, required=False)
+    event_id = serializers.IntegerField()
+    evaluated_user_id = serializers.IntegerField()
+    evaluator_user_id = serializers.IntegerField()
+    type = serializers.CharField(required=False, default="360")
+    created_at = serializers.DateTimeField(required=False)
+    answers = EvaluationAnswerSerializer(many=True)
+
+    def validate_answers(self, value):
+        if not value:
+            raise serializers.ValidationError("Debe incluir al menos una respuesta.")
+        for answer in value:
+            if answer["score"] < 1 or answer["score"] > 5:
+                raise serializers.ValidationError("El puntaje debe estar entre 1 y 5.")
+        return value
 
 
 class EventSerializer(serializers.Serializer):
@@ -15,38 +33,33 @@ class EventSerializer(serializers.Serializer):
     end_date = serializers.DateTimeField()
     admin_id = serializers.IntegerField()
 
-
-class EvaluationSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True, required=False)
-    event_id = serializers.IntegerField()
-    evaluated_user_id = serializers.IntegerField()
-    evaluator_user_id = serializers.IntegerField()
-    type = serializers.CharField(default="360", required=False)
-    created_at = serializers.DateTimeField(required=False)
-    answers = EvaluationAnswerSerializer(many=True)
-from rest_framework import serializers
+    def validate(self, attrs):
+        if attrs["start_date"] > attrs["end_date"]:
+            raise serializers.ValidationError("La fecha de inicio no puede ser mayor a la de fin.")
+        return attrs
 
 
-class EvaluationAnswerSerializer(serializers.Serializer):
-    criterion_id = serializers.IntegerField()
-    score = serializers.IntegerField()
-    comment = serializers.CharField(allow_blank=True, allow_null=True, required=False)
-
-
-class EvaluationSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=False)
-    event_id = serializers.IntegerField()
-    evaluated_user_id = serializers.IntegerField()
-    evaluator_user_id = serializers.IntegerField()
-    type = serializers.CharField(required=False, default="360")
-    created_at = serializers.DateTimeField(required=False)
-    answers = EvaluationAnswerSerializer(many=True)
-
-
-class EventSerializer(serializers.Serializer):
-    id = serializers.IntegerField(required=False)
+class InternHoursSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
-    description = serializers.CharField(allow_blank=True, required=False)
-    start_date = serializers.DateTimeField()
-    end_date = serializers.DateTimeField()
-    admin_id = serializers.IntegerField()
+    horas = serializers.IntegerField()
+    horas_jul_oct = serializers.IntegerField()
+    horas_acumuladas = serializers.IntegerField()
+    horas_necesarias = serializers.IntegerField()
+    horas_restantes_2212 = serializers.IntegerField()
+    falta_sobra = serializers.IntegerField()
+    faltaria_sobraria = serializers.IntegerField()
+    total = serializers.IntegerField()
+    cumplimiento_pct = serializers.IntegerField()
+
+
+class FeedbackRequestSerializer(serializers.Serializer):
+    """Entrada para generación de feedback asistido por IA (o heurística)."""
+
+    puntaje = serializers.FloatField()
+    kpis = serializers.DictField(
+        child=serializers.FloatField(),
+        required=False,
+        help_text="Diccionario opcional de KPI: {'puntualidad': 8.5, ...}",
+    )
+    comentario = serializers.CharField(allow_blank=True, required=False)

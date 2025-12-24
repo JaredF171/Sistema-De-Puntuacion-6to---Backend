@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import EventModel, EvaluationModel, EvaluationAnswerModel
+from .models import EventModel, EvaluationModel, EvaluationAnswerModel, InternHoursModel
 
 
 @admin.register(EventModel)
@@ -17,3 +17,15 @@ class EvaluationModelAdmin(admin.ModelAdmin):
 @admin.register(EvaluationAnswerModel)
 class EvaluationAnswerModelAdmin(admin.ModelAdmin):
     list_display = ("id", "evaluation", "criterion_id", "score")
+
+
+@admin.register(InternHoursModel)
+class InternHoursModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "horas",
+        "horas_acumuladas",
+        "total",
+        "cumplimiento_pct",
+    )
+    search_fields = ("name",)

@@ -1,8 +1,16 @@
 from django.urls import path
-from src.app.api.controllers import EventController, EvaluationController, AverageController
+from src.app.api.controllers import (
+    EventController,
+    EvaluationController,
+    AverageController,
+    InternHoursController,
+    AIFeedbackController,
+)
 
 urlpatterns = [
     path('events/', EventController.as_view()),
     path('evaluations/', EvaluationController.as_view()),
     path('evaluations/average/<int:user_id>/', AverageController.as_view()),
+    path('intern-hours/', InternHoursController.as_view()),
+    path('ai/feedback/', AIFeedbackController.as_view()),
 ]
